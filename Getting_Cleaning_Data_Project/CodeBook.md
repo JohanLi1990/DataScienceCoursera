@@ -17,8 +17,9 @@ For each single observation, 561 derived measurements were made from the acceler
 
 With the inclusion of Activity and Subject, the variables sampled are listed below:
 
- "Subject" |                        "Activity"   |                     "tBodyAcc-mean()-X"  |             "tBodyAcc-mean()-Y" |
+  variable names|                                |                                          |                                 |
  ----------|-------------------------------------|------------------------------------------|---------------------------------|
+  "Subject" |                        "Activity"   |                     "tBodyAcc-mean()-X"  |             "tBodyAcc-mean()-Y" |
  "tBodyAcc-mean()-Z" |              "tBodyAcc-std()-X"  |              "tBodyAcc-std()-Y"  |              "tBodyAcc-std()-Z"  |             
  "tGravityAcc-mean()-X" |           "tGravityAcc-mean()-Y"  |          "tGravityAcc-mean()-Z"   |         "tGravityAcc-std()-X" |           
  "tGravityAcc-std()-Y" |            "tGravityAcc-std()-Z" |            "tBodyAccJerk-mean()-X"|           "tBodyAccJerk-mean()-Y" |         
