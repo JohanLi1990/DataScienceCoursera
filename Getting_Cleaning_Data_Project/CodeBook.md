@@ -3,10 +3,12 @@
 ## Raw Data
 
 The raw data is collected from the research: "Human Activity Recognition Using Smartphones Data Set"
-link: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
+link: http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones.
 
 The raw data is in txt file format, with no headers. The subject and activity were separated from the rest of the variables initially. 
 Furthermore, the test and training data sets are also separated, and it is our intention to combine them. 
+
+There are 10299 observation in totall. 
 
 
 ## Variables
@@ -41,6 +43,14 @@ With the inclusion of Activity and Subject, the variables sampled are listed bel
  "fBodyBodyGyroMag-std()"|          "fBodyBodyGyroMag-meanFreq()" |    "fBodyBodyGyroJerkMag-mean()"  |   "fBodyBodyGyroJerkMag-std()" |    
  "fBodyBodyGyroJerkMag-meanFreq()"|
  
+ 
+ At the end of the project, new variable based on average of the measurements were calculated. They are simply labeled with an "Average in front", for example:
+ 
+ Old Variable | New Variable|
+ -------------|-------------|
+ fBodyGyro-std()-Y|Average fBodyGyro-std()-Y|
+ 
+ 
 ### Data Type
 Variable | DataType
 ---------|---------
@@ -70,6 +80,8 @@ Value | Meaning
 Value | Meaning
 ------|--------
 [-1, 1]| normalized values
+
+
 
 
 ## Transformations from Raw to Tidy Data set
