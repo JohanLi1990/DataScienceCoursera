@@ -30,7 +30,7 @@ train_data_activity$V1 <- factor(train_data_activity$V1)
 
 # Step III: get all the column index related to mean and std from features_info.txt
 # using regular expression
-features_info <- read.table("./UCI HAR Dataset/features.txt")
+features_info <- read.table("features.txt")
 pattern1 <- "mean"
 pattern2 <- "std"
 int_1 <- grep(pattern1, x = features_info$V2)
