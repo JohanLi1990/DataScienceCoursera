@@ -8,17 +8,18 @@
 # 5. From the data set in step 4, creates a second, independent tidy data set with 
 #    the average of each variable for each activity and each subject.
 #
+setwd("~/Documents/DataScienceCoursera/Getting_Cleaning_Data_Project")
 library(plyr)
 library(dplyr)
 
 # #----Step I: read into Rstudio, inspect data samples---
-test_data_bulk <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/test/X_test.txt")
-test_data_activity <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/test/y_test.txt")
-test_data_subject <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/test/subject_test.txt")
+test_data_bulk <- read.table("X_test.txt")
+test_data_activity <- read.table("y_test.txt")
+test_data_subject <- read.table("subject_test.txt")
 
-train_data_bulk <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/train/X_train.txt")
-train_data_activity <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/train/y_train.txt")
-train_data_subject <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/train/subject_train.txt")
+train_data_bulk <- read.table("X_train.txt")
+train_data_activity <- read.table("y_train.txt")
+train_data_subject <- read.table("subject_train.txt")
 
 # Step II : convert activity and subject to factors
 test_data_subject$V1 <- factor(test_data_subject$V1)
@@ -29,7 +30,7 @@ train_data_activity$V1 <- factor(train_data_activity$V1)
 
 # Step III: get all the column index related to mean and std from features_info.txt
 # using regular expression
-features_info <- read.table("./Getting_Cleaning_Data_Project/UCI HAR Dataset/features.txt")
+features_info <- read.table("./UCI HAR Dataset/features.txt")
 pattern1 <- "mean"
 pattern2 <- "std"
 int_1 <- grep(pattern1, x = features_info$V2)
