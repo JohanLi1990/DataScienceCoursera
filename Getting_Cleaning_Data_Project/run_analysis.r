@@ -43,6 +43,7 @@ test_interest <- select(test_data_bulk, col_interested)
 train_interest <- select(train_data_bulk, col_interested)
 
 # Step V: transform activity into a descriptive one:
+# full <- merge(x=full, y=activity, by.x = c("activity"), by.y = c("V1"), all.x=TRUE) will do the job too
 test_data_activity$V1 <- revalue(test_data_activity$V1, c("1" = "Walking", 
                               "2" = "Walking_Upstair", 
                               "3" = "Walking_Downstair", 
@@ -72,6 +73,10 @@ test_and_train_final <- rbind(test_interest, train_interest)
 # Step VI: rename some of the variables
 oldnames <- names(test_and_train_final)
 newnames <- features_info$V2
+
+# colnames(xtest) <- column_names
+# colnames(subject_test) <- "subject"
+# colnames(ytest) <- "activity"
 for (i in 3:81) {
   new_name <- as.character(newnames[col_interested[i-2]])
   colnames(test_and_train_final)[i] <- new_name
