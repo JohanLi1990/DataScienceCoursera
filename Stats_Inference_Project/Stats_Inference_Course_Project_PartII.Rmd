@@ -1,0 +1,125 @@
+---
+title: "Stats_Inference_Project_PartII"
+author: "LI CHENYANG"
+date: "December 25, 2015"
+output: pdf_document
+---
+
+## Overview
+- In the second portion of the class, we're going to analyze the ToothGrowth data in the R datasets package. 
+
+## 1. Basic Exploratory data analyses
+
+- In this case, I plot six histograms, with each representing one possible combination between supp and dose factors. 
+
+- From the graph below, we can see roughly see that
+    
+    
+    1.OJ may be a better supplement than VC when it comes to teeth growth. 
+    
+    2.The higher the dose, the longer the teeth will grow. However I am more interested in the extent of growth when the dosage increases. By the law of marginal diminishing return, I would guess that increasing dosage from 1 to 2 will not necessarily yeild a better growth than increasing dosage from 0.5 to 1. 
+
+```{r, echo=FALSE, message = FALSE}
+library(ggplot2)
+library(plyr)
+library(dplyr)
+RawData <- ToothGrowth
+RawData$dose <- factor(RawData$dose)
+g <- ggplot(data = RawData, aes(x=len, fill = dose)) + geom_histogram(binwidth=0.8)
+g + facet_grid(supp~dose)
+```
+
+
+## 2. Provide a basic summary of the data.
+
+- The data frame has 60 observation made by the same 10 guinea pigs. 
+- The data fram has 3 columns, which are len, supp and dose
+- len represent the length of the teeth
+- supp represent the supplement type
+- dose represent dosage amount for the supplement
+
+perhaps a statistic summary will help us understand the big picture
+
+```{r echo=FALSE}
+RawData <- group_by(RawData, supp, dose)
+summarize(.data = RawData, mean_len = mean(len), var_len = var(len))
+
+```
+
+
+## 3. Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. (Only use the techniques from class, even if there's other approaches worth considering)
+
+### Compare tooth growth by dose 
+
+- I would like to compare the growth of teeth between two scenarios. First scenarios is when dosage is raised from 0.5 to 1, and second scenarios is when dosage raised from 1 to 2
+
+- **Null Hypotheses**
+- H0: mean of difference in scenario 1 = mean of differen in scenario 2
+
+- set alpha as 0.05 
+
+- I consider dose = 0.5 as the base level. 
+ 
+- **Assumption**: 
+- The growth in tooth is not affected by factors not mentioned in the datasets
+- The guinea pig has not done anything to shorten its teeth during the process. 
+- All the observations made are based on the original 10 guinea pigs. 
+
+
+
+- We only use data from the VC group
+
+```{r}
+g10 <- RawData$len[11:20] - RawData$len[1:10]
+g21 <- RawData$len[21:30] - RawData$len[11:20]
+t.test(g10, g21, paired = TRUE)$p.value
+
+```
+
+- The p-value = 0.829 > 0.05
+- Therefore I do not reject the null hypothesis
+- This result suggest that increasing the dose from 1 to 2 renders similar growth result as when increasing dose from 0.5 to 1. 
+
+
+### Compare tooth growth by changing supp
+
+- compare growth when changing supp for dose group 0.5, calculate confidence interval 
+```{r}
+g0_s <- RawData$len[1:10]- RawData$len[31:40]
+g1_s <- RawData$len[11:20]- RawData$len[41:50]
+g2_s <- RawData$len[21:30]- RawData$len[51:60]
+t.test(g0_s)$conf
+
+```
+
+- The confidence interval (95%, 2 side) is [-9.24, -1.26], entirely below zero. 
+- This suggest that changing VC to OJ for dose 0.5 totally increased the tooth length
+  
+```{r}
+
+t.test(g1_s)$conf
+```
+
+- The confidence interval (95%, 2 side) is [-9.908089 -1.951911], entirely below zero. 
+- This suggest that changing VC to OJ for dose 1 totally increased the tooth length
+  
+ 
+```{r}
+
+t.test(g2_s)$conf
+```
+
+- The confidence interval (95%, 2 side) is [-4.168976  4.328976], evenly distributed around 0.
+- In this case the change of supp *may not have made a difference*.
+
+
+
+## 4. State your conclusions and the assumptions needed for your conclusions. 
+
+- **Conclusion 1**, increasing dosage from 0.5 to 1 generates similar tooth growth as increasing dosage from 1 to 2. 
+
+- ** Conlusion 2**, Changing supplement from VC to OJ helps tooth growth when the dosage is low. When dosage reaches 2, the change of supplement does not affect the tooth growth very much. 
+
+
+
+
