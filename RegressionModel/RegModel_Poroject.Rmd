@@ -1,0 +1,120 @@
+---
+title: "R_Project_RegModel"
+author: "LI CHENYANG"
+date: "June 4, 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE, error=TRUE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Executive Summary
+
+In this report I study the variables that may have an impact on MPG (miles per gallon). In particular, I am interested in the relationship between Auto/Manual transmissions and MPG. A quick exploratory analysis is carried out, before linear regression modelling is done to the data. From the study we can conclude that:  
+1) Keeping all other things constant, Manual has higher MPG output than Auto.   
+2) Auto has a MPG that is 14.079 + (-4.14)*Unit_Weight different from Manual.   
+
+The data used in this report was extracted from 1974 Motor Trend US magazine, as stated in R documentation.    
+
+
+```{r mtcars, echo=FALSE, }
+library(ggplot2)
+data("mtcars")
+mtcars$cyl <- as.factor(mtcars$cyl)
+mtcars$am <- as.factor(mtcars$am)
+
+```
+
+## Exploratory Analysis
+
+For starter, an exploratory analysis is done to explore a general relationship between MPG and other variables in the dataset. Please find the graphs in **Appendix**.   
+**1) Box Plot shows that Auto Transmission has a lower MPG output than Manual Translation,** if no other criteria is taken into consideration.  
+**2) MPG v.s Auto/Manual (with cyl) shows that for cars with the same cylinder, Auto SEEMS to have lower average MPG output than Manul.** However, the sample size is not large and the observation might be biased.   
+**3) MPG v.s Weight indicates that MPG is negatively related to weight.** We could also see most of the manual cars studied are on average lighter than those of auto cars. Therefore we need to adjust for weight when we do regression modelling on the MPG v.s. AM.   
+
+
+## Regression Analysis
+### Strategy
+1) In this case I am going to try three linear models, each with different predictors.  
+2) To select the best among the three, I am going to examine  **Pr(>t)**, which indicate significance of the predictor, 
+3) and also **Adjusted R-Squared Value**, which indicates the amount of variance explained by the model.
+
+At the end, we will do residual analysis to double check whether the model is a good fit. 
+
+### Model 1: Consider just AM inside mtcars
+
+```{r, echo=T}
+fit1 <- lm(mpg ~ am, mtcars)
+summary(fit1)
+```
+As we can see, the model is not very good in this case. The adjusted R-squared value indicates that the model can only explain 34% of the variance for the variables. This indicates that other variable must be added into the model, such weight and number of cylinders. 
+
+### Model 2: Consider AM, Weight and number of cylinders
+```{r, echo=TRUE}
+fit2 <- lm(mpg ~ am + wt + cyl, mtcars)
+summary(fit2)
+```
+This model is better than the previous one, in that the Adjusted R-squared value is 0.8134, which indicates that model explains 81% of the variance for the variables. However, the Pr(>t) value for am1 is 0.909, which is abover 5% threshold. This renders a variable of interest non-insiginifcant, and thus may not be an optimal choice. 
+
+Also note for cyl, there are only two factors present in summary. This indicates that cyl4 is collinear with one of the variables. Therefore, in the next case, we are taking out cyl variable, and replace it with qsec. 
+
+### Model 3: Adding intercation term, taking out cyliner, add horse power. 
+
+```{r, echo=TRUE}
+fit3 <- lm(mpg ~ am + wt+ am*wt + qsec, mtcars)
+summary(fit3)
+```
+In this case we can tell that this model is a much better model because,   
+- First, the adjusted R-squared value increases from 81% to 88%.  
+- secondly, all coefficients are significant.    
+
+**Now we analyse the residual**  
+According to the residual plot shown in the appendix, we can observe that:    
+1) The residual v.s. fitted plot seems to be random, thereby indicating there is no other hidden relationship.   
+2) QQ-Q plot indicates strong normalities;  
+3) The scale-location plots contains totally random points, which is a sign for constant variance.   
+4) Last but not least residual v.s. leverage indicates there are not outliers.   
+
+## Conclusion  
+In this case we will select model 3. Using it to answer the questions in the executive summary:  
+1) Auto translation has a lower miles per gallon out put than Manual translation.  
+2) Keeping other variable constant, Manual Transmission will have 14.079 + (-4.14)*Unit_Weight MPG output difference from Auto Translation. 
+
+## Appendix 
+
+```{r boxplots, echo=FALSE}
+boxplot(mpg ~ am, data = mtcars, col = "green", main = "Boxplot")
+
+```
+    
+```{r, echo=FALSE}
+g<-ggplot(data = mtcars, aes(am, mpg))
+g<- g + facet_grid(.~ cyl)
+g<- g + geom_point(aes(color = am)) + labs(title = "MPG v.s Auto/Manual") + labs(x = "Auto Tramssion = 0, Manual Transmission = 1", y = "MPG")
+g
+```
+    
+```{r, echo=FALSE}
+g<-ggplot(data = mtcars, aes(wt, mpg))
+#g<- g + facet_grid(.~ cyl)
+g<- g + geom_point(aes(color = am)) + labs(title = "MPG v.s Weight") + labs(x = "Weight (1000lbs) ", y = "MPG")
+# AM_weight<- mtcars$mpg[mtcars$am == 0]
+# MM_weight<- mtcars$mpg[mtcars$am == 1]
+# g<- g+ geom_hline(yintercept=mean(AM_weight), color = "red")
+# g<- g+ geom_hline(yintercept = mean(MM_weight), color = "blue")
+g
+```
+    
+
+### Residual Plots: Best Model
+```{r, echo=F}
+par(mfrow = c(2, 2))
+plot(fit3)
+```
+
+
+
