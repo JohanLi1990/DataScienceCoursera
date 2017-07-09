@@ -190,7 +190,7 @@ FinalValidation &lt;- Training_preFinal[-TrainingID, ]</code></pre>
 </div>
 <div id="generalized-boosting-model-gbm" class="section level3">
 <h3>Generalized Boosting Model: <code>gbm</code></h3>
-<p>We use 10-fold cross validation, repeated 10 times.</p>
+<p>We use 3-fold cross validation. In this case, since most variables are integer and numerical, we are implementing centering and scaling on the data.</p>
 <pre class="r"><code>set.seed(245)
 tr_ctrl &lt;- trainControl(FinalTraining, method = &quot;cv&quot;, number = 3)
 model_gbm &lt;- train(classe ~., data = FinalTraining, preProcess = c(&quot;center&quot;, &quot;scale&quot;)

@@ -81,7 +81,7 @@ FinalValidation <- Training_preFinal[-TrainingID, ]
 A few models will be built, and we will decide which one to use based on their performances. 
 
 ### Generalized Boosting Model: `gbm`
-We use 10-fold cross validation, repeated 10 times. 
+We use 3-fold cross validation. In this case, since most variables are integer and numerical, we are implementing centering and scaling on the data.  
 ``` {r generalized Boosting regression model}
 set.seed(245)
 tr_ctrl <- trainControl(FinalTraining, method = "cv", number = 3)
