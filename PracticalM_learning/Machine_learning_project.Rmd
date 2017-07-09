@@ -1,0 +1,127 @@
+---
+title: "Course_Project_Prac_Machine_Learning"
+author: "LI CHENYANG"
+date: "July 9, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = T)
+```
+
+## Objectives
+The goal of this project is to predict the manner in which exercises were performed. The manners are defined by the "classe" variable in the training set, which constitues five levels: A completely according to instruction, and B, C, D, E all slightly incorrect. 
+
+## Loading the data
+We need to first download the files of interest. Then we will load them into the environments. 
+```{r  echo = T, message = F}
+library(caret)
+library(randomForest); library(plyr);
+library(gbm);
+training_link <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-training.csv"
+download.file(url=training_link, destfile="pml-training", method="curl")
+testing_link <- "https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv"
+download.file(url=testing_link, destfile="pml-testing", method="curl")
+
+# Replace all blank with NA
+Training <-  read.csv("pml-training", header=TRUE, na.strings = c("NA","",'#DIV/0!'))
+Testing <- read.csv("pml-testing",header=TRUE, na.strings = c("NA","",'#DIV/0!'))
+```
+
+
+## Cleaning
+
+### Removing columns with NA
+```{r echo=FALSE}
+Training<- Training[ , colSums(is.na(Training)) == 0]
+Testing<- Testing[ , colSums(is.na(Testing)) == 0]
+```
+To make sure all variables are the same from the preprocessed 
+```{r}
+Names_Training <- names(Training)
+Names_Testing <- names(Testing)
+Names_Testing == Names_Training
+```
+
+### Removing unnecessary columns
+
+As it turns out, only one column is different. The column of difference is the `problem_id` and `classe`. 
+We will keep `classe` for `Training`, and remove `problem_id` for `Testing`. 
+
+Another careful examination of the names in the data, we can find out that the first 7 columns are, not so relevant, since we have no interest in individual identity, nor the time and window they performed the activity. 
+
+```{r extracting first 59 columns}
+names(Training)[1:7]
+```
+```{r, first 6 columns}
+Training_preFinal <- Training[,-(1:7)]
+Testing_preFinal<- Testing[,-(1:7)]
+Testing_preFinal<-Testing_preFinal[, -53]
+```
+  
+
+An attempt to remove all variable with little variance is conducted. 
+```{r}
+NearZero <- nearZeroVar(Training_preFinal)
+print(NearZero)
+```
+However, apparently all variables remained have quite high variance. So eventually none is removed. 
+
+## Building the model
+
+### Validation Set
+We want to slice 25% for validation, and use the remaining 75% to train.
+```{r separation}
+set.seed(123)
+TrainingID <- createDataPartition(Training_preFinal$classe, p=0.75, list = F)
+FinalTraining <- Training_preFinal[TrainingID,]
+FinalValidation <- Training_preFinal[-TrainingID, ]
+```
+
+A few models will be built, and we will decide which one to use based on their performances. 
+
+### Generalized Boosting Model: `gbm`
+We use 10-fold cross validation, repeated 10 times. 
+``` {r generalized Boosting regression model}
+set.seed(245)
+tr_ctrl <- trainControl(FinalTraining, method = "cv", number = 3)
+model_gbm <- train(classe ~., data = FinalTraining, preProcess = c("center", "scale")
+                   , trControl = tr_ctrl, method = "gbm", verbose = F)
+
+```
+(Note that the model is very time consuming to make. I think maybe, it is best to leave the preProcess part)
+
+Now let us evaluate the `gbm` model. 
+```{r, try on validation}
+gbm_pred <- predict(model_gbm, newdata = FinalValidation)
+gbm_evaluation <- confusionMatrix(gbm_pred, FinalValidation$classe)
+gbm_outta_sample_error <- 1 - gbm_evaluation$overall[1]
+names(gbm_outta_sample_error) <- "out of sample error for gbm"
+gbm_outta_sample_error
+```
+
+### Random Forest
+( Note the default random forest function will perform bootstrap on the data, it is hence not necessary to include preProcess in this case. However, if you want to improve accuracy by 0.0006, then do it. )
+```{r random forest}
+set.seed(246)
+model_rf <- train(classe ~., data = FinalTraining, method = "rf",
+                  trControl = tr_ctrl, preProcess = c("center", "scale"))
+rf_pred <- predict(model_rf, newdata = FinalValidation)
+rf_evaluation <- confusionMatrix(rf_pred, FinalValidation$classe)
+rf_outta_sample_error <- 1 - rf_evaluation$overall[1]
+names(rf_outta_sample_error) <- "out of sample error for rf"
+rf_outta_sample_error
+
+```
+As we can see here, the accuracy is off the chart in this case. 
+
+## Conclusion
+The two models above are highly accuracte on the training data set. Either one would produce fair prediction on the Testing data. 
+
+Since random forest has a lower out of sampler error rate. It is chosen to predict on the Testing set. 
+
+```{r Testing}
+rf_test_pred <- predict(model_rf, newdata = Testing_preFinal)
+print(rf_test_pred)
+
+```
