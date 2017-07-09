@@ -3,8 +3,8 @@ title: "R_Project_RegModel"
 author: "LI CHENYANG"
 date: "June 4, 2017"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE, error=TRUE}
@@ -82,10 +82,14 @@ According to the residual plot shown in the appendix, we can observe that:
 ## Conclusion  
 In this case we will select model 3. Using it to answer the questions in the executive summary:  
 1) Auto translation has a lower miles per gallon out put than Manual translation.  
-2) Keeping other variable constant, Manual Transmission will have 14.079 + (-4.14)*Unit_Weight MPG output difference from Auto Translation. 
-
+2) Keeping other variable constant, Manual Transmission will have 14.079 + (-4.14)*Unit_Weight MPG output difference from Auto Translation.  
+3) The confidence interval of this model is
+```{r, echo=T}
+confint(fit3)
+```
+At 95% confidence level, The difference in MPG ranges from 7.03 +(-6.59) x Weight to 21.12 + (-1.68) x Weight.
+  
 ## Appendix 
-
 ```{r boxplots, echo=FALSE}
 boxplot(mpg ~ am, data = mtcars, col = "green", main = "Boxplot")
 
