@@ -32,7 +32,7 @@ Testing <- read.csv("pml-testing",header=TRUE, na.strings = c("NA","",'#DIV/0!')
 ## Cleaning
 
 ### Removing columns with NA
-```{r echo=FALSE}
+```{r echo=T, message=F}
 Training<- Training[ , colSums(is.na(Training)) == 0]
 Testing<- Testing[ , colSums(is.na(Testing)) == 0]
 ```

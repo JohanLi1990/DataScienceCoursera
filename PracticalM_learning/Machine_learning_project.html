@@ -146,6 +146,8 @@ Testing &lt;- read.csv(&quot;pml-testing&quot;,header=TRUE, na.strings = c(&quot
 <h2>Cleaning</h2>
 <div id="removing-columns-with-na" class="section level3">
 <h3>Removing columns with NA</h3>
+<pre class="r"><code>Training&lt;- Training[ , colSums(is.na(Training)) == 0]
+Testing&lt;- Testing[ , colSums(is.na(Testing)) == 0]</code></pre>
 <p>To make sure all variables are the same from the preprocessed</p>
 <pre class="r"><code>Names_Training &lt;- names(Training)
 Names_Testing &lt;- names(Testing)
