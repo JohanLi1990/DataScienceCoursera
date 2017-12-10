@@ -1,0 +1,33 @@
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(leaflet)
+```
+
+## December 10, 2017
+
+```{r map}
+TAPIcon <- makeIcon(
+  iconUrl = "https://cdn4.iconfinder.com/data/icons/flag-pins/512/Singapore_Flag.png",
+  iconWidth = 31*215/230, iconHeight = 31,
+  iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+TAPLatLong <- data.frame(
+  lat = c(1.332639, 1.332349, 1.331738),
+  lng = c(103.847046, 103.848473, 103.848720 )
+  )
+TAPSites <- c(
+  "<a href='landtransportguru.net/toa-payoh-station/'>The Toa Payoh MRT station</a>",
+  "<a href='http://www.hdb.gov.sg/cs/infoweb/homepage/'>Housing and Development Board</a>",
+  "<a href='https://www.britishcouncil.sg/'>British Council</a>"
+)
+
+TAPLatLong %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = TAPIcon, popup = TAPSites)
+```
+
+
