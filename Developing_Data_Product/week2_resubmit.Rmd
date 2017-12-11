@@ -1,11 +1,16 @@
-
+---
+title: "Week2Assignmen_resubmit"
+author: "LI CHENYANG"
+date: "December 11, 2017"
+output: html_document
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(leaflet)
 ```
 
-## December 11, 2017
+## My Interactive Map
 
 ```{r map}
 TAPIcon <- makeIcon(
@@ -16,7 +21,7 @@ TAPIcon <- makeIcon(
 
 TAPLatLong <- data.frame(
   lat = c(1.332639, 1.332349, 1.331738),
-  lng = c(103.847046, 103.848473, 103.848720)
+  lng = c(103.847046, 103.848473, 103.848720 )
   )
 TAPSites <- c(
   "<a href='landtransportguru.net/toa-payoh-station/'>The Toa Payoh MRT station</a>",
