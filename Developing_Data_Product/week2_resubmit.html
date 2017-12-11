@@ -135,10 +135,32 @@ $(document).ready(function () {
 </div>
 
 
-<div id="my-interactive-map" class="section level2">
-<h2>My Interactive Map</h2>
-<div id="htmlwidget-3f48c33e66bd7ada5710" style="width:672px;height:480px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3f48c33e66bd7ada5710">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[1.332639,1.332349,1.331738],[103.847046,103.848473,103.84872],{"iconUrl":{"data":"https://cdn4.iconfinder.com/data/icons/flag-pins/512/Singapore_Flag.png","index":0},"iconWidth":28.9782608695652,"iconHeight":31,"iconAnchorX":14.4891304347826,"iconAnchorY":16},null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["<a href='landtransportguru.net/toa-payoh-station/'>The Toa Payoh MRT station<\/a>","<a href='http://www.hdb.gov.sg/cs/infoweb/homepage/'>Housing and Development Board<\/a>","<a href='https://www.britishcouncil.sg/'>British Council<\/a>"],null,null,null,null,null,null]}],"limits":{"lat":[1.331738,1.332639],"lng":[103.847046,103.84872]}},"evals":[],"jsHooks":[]}</script>
+<div id="places-i-have-been-to" class="section level2">
+<h2>Places I have been to</h2>
+<pre class="r"><code>TAPIcon &lt;- makeIcon(
+  iconUrl = &quot;https://cdn4.iconfinder.com/data/icons/flag-pins/512/Singapore_Flag.png&quot;,
+  iconWidth = 31*215/230, iconHeight = 31,
+  iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+TAPLatLong &lt;- data.frame(
+  lat = c(1.0456, 1.4927, 6.3500), 
+  #1.0456° N, 104.0305° E; Batam
+  #1.4927° N, 103.7414° E; Johor Bahru; 6.3500° N, 99.8000° E Langkawi
+  lng = c(104.030, 103.7414, 99.8000 )
+  )
+TAPSites &lt;- c(
+  &quot;&lt;a href='https://en.wikipedia.org/wiki/Batam/'&gt;Batam&lt;/a&gt;&quot;,
+  &quot;&lt;a href='https://en.wikipedia.org/wiki/Johor/'&gt;Johor Bahru&lt;/a&gt;&quot;,
+  &quot;&lt;a href='https://www.langkawi-info.com/'&gt;Langkawi&lt;/a&gt;&quot;
+)
+
+TAPLatLong %&gt;% 
+  leaflet() %&gt;%
+  addTiles() %&gt;%
+  addMarkers(icon = TAPIcon, popup = TAPSites)</code></pre>
+<div id="htmlwidget-041e733d6a3e40be71c1" style="width:672px;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-041e733d6a3e40be71c1">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"maxNativeZoom":null,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"continuousWorld":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":null,"unloadInvisibleTiles":null,"updateWhenIdle":null,"detectRetina":false,"reuseTiles":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[1.0456,1.4927,6.35],[104.03,103.7414,99.8],{"iconUrl":{"data":"https://cdn4.iconfinder.com/data/icons/flag-pins/512/Singapore_Flag.png","index":0},"iconWidth":28.9782608695652,"iconHeight":31,"iconAnchorX":14.4891304347826,"iconAnchorY":16},null,null,{"clickable":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["<a href='https://en.wikipedia.org/wiki/Batam/'>Batam<\/a>","<a href='https://en.wikipedia.org/wiki/Johor/'>Johor Bahru<\/a>","<a href='https://www.langkawi-info.com/'>Langkawi<\/a>"],null,null,null,null,null,null]}],"limits":{"lat":[1.0456,6.35],"lng":[99.8,104.03]}},"evals":[],"jsHooks":[]}</script>
 </div>
 
 

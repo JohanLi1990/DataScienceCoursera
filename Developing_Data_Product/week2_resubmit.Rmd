@@ -10,9 +10,9 @@ knitr::opts_chunk$set(echo = FALSE)
 library(leaflet)
 ```
 
-## My Interactive Map
+## Places I have been to
 
-```{r map}
+```{r map, echo = TRUE}
 TAPIcon <- makeIcon(
   iconUrl = "https://cdn4.iconfinder.com/data/icons/flag-pins/512/Singapore_Flag.png",
   iconWidth = 31*215/230, iconHeight = 31,
@@ -20,13 +20,15 @@ TAPIcon <- makeIcon(
 )
 
 TAPLatLong <- data.frame(
-  lat = c(1.332639, 1.332349, 1.331738),
-  lng = c(103.847046, 103.848473, 103.848720 )
+  lat = c(1.0456, 1.4927, 6.3500), 
+  #1.0456° N, 104.0305° E; Batam
+  #1.4927° N, 103.7414° E; Johor Bahru; 6.3500° N, 99.8000° E Langkawi
+  lng = c(104.030, 103.7414, 99.8000 )
   )
 TAPSites <- c(
-  "<a href='landtransportguru.net/toa-payoh-station/'>The Toa Payoh MRT station</a>",
-  "<a href='http://www.hdb.gov.sg/cs/infoweb/homepage/'>Housing and Development Board</a>",
-  "<a href='https://www.britishcouncil.sg/'>British Council</a>"
+  "<a href='https://en.wikipedia.org/wiki/Batam/'>Batam</a>",
+  "<a href='https://en.wikipedia.org/wiki/Johor/'>Johor Bahru</a>",
+  "<a href='https://www.langkawi-info.com/'>Langkawi</a>"
 )
 
 TAPLatLong %>% 
