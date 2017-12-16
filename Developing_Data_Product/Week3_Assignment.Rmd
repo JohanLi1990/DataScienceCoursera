@@ -1,0 +1,45 @@
+---
+title: "Week3_Assignment"
+author: "LI CHENYANG"
+date: "December 16, 2017"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(plotly)
+library(dplyr)
+library(tidyr)
+```
+
+## Data (Taken December 16, 2017)
+- I am going to do a multi-plot with the stock price data from three companies:
+Apple, Facebook and Alibaba. 
+
+- The data used here comes from Nasdaq Website. 
+
+## Three month stock price interactive plot
+```{r Interactive Plot, echo=FALSE, message=FALSE, warning=FALSE}
+Alibaba <- read.csv("Baba.csv")
+Facebook <- read.csv("FaceBook.csv")
+Apple <- read.csv("Apple.csv")
+
+Alibaba_closing <- select(Alibaba, date, close)
+Facebook_closing <- select(Facebook, date, close)
+Apple_closing <- select(Apple, date, close)
+# Need to join the three dataset together. 
+Ali_face_Apple <- left_join(Alibaba_closing, Facebook_closing, by = "date")
+Ali_face_Apple <- left_join(Ali_face_Apple, Apple_closing, by = "date")
+Ali_face_Apple <- rename(Ali_face_Apple, Alibaba = close.x)
+Ali_face_Apple <- rename(Ali_face_Apple,Facebook = close.y, Apple = close)
+Ali_face_Apple$date <- as.Date(Ali_face_Apple$date)
+Ali_face_Apple <- arrange(Ali_face_Apple, date)
+# Need to plot
+StockPrice <- as.data.frame(Ali_face_Apple[, 2:4]) %>%
+  gather(index, price) %>%
+  mutate(time = rep(Ali_face_Apple$date, 3))
+
+plot_ly(StockPrice, x = ~time, y = ~price, color = ~index, type = "scatter", mode = "lines")
+
+```
+
