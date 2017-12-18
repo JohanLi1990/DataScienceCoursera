@@ -14,11 +14,7 @@ library(tidyr)
 
 ## Data (Taken December 16, 2017)
 - I am going to do a multi-plot with the stock price data from three companies:
-Apple, Facebook and Alibaba. 
-
-- The data used here comes from Nasdaq Website. 
-
-## Three month stock price interactive plot
+Apple, Facebook and Alibaba. (Data taken from Nasdaq)
 ```{r Interactive Plot, echo=FALSE, message=FALSE, warning=FALSE}
 Alibaba <- read.csv("Baba.csv")
 Facebook <- read.csv("FaceBook.csv")
