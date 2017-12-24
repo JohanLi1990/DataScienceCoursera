@@ -1,0 +1,63 @@
+---
+title: "Iris Classfication Application"
+author: "LI CHENYANG"
+logo: iris.png
+date: "December 24, 2017"
+output: ioslides_presentation
+widscreen: TRUE
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(caret)
+library(ggplot2)
+library(plotly)
+```
+
+## Iris Classification
+
+* This app is created to classify iris, based on the attributes specified in "Edgar Anderson's Iris Data":
+
+    **Sepal Length,   Sepal Width,  Petal Length,  Petal Width**
+
+* When user keys in the values for the attributes, a prediction will be made. 
+* For demonstration purpose, we will use the values below as example. 
+    + Sepal Length = 6cm
+    + Sepal Width = 3cm
+    + Petal Length = 6cm
+    + Petal Width = 2cm 
+
+
+## Apps Demonstration: Prediction
+### Creating the model
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+irisModel <- train(Species~ .,data=iris,method="rf",prox=TRUE)
+```
+### Loading input into the model
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+inputData <- data.frame(Sepal.Length = 6, Sepal.Width = 3,
+                        Petal.Length = 6, Petal.Width = 2)
+result <- predict(irisModel, inputData)
+result
+```
+## Apps Demonstration: 1st Scatter Plots
+###### The measurement of new flower is shown by the diamond shape.
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+p1 <- ggplot(data = iris, aes(x = Petal.Length, 
+                              y = Sepal.Length, color = Species
+                              )) + geom_point()
+inputData$Species <- result
+p1 <- p1 + geom_point(data = inputData, shape = 23, size = 4)
+ggplotly(p1)
+```
+
+## Apps Demonstration: 2nd Scatter Plots
+###### This figure plots the "width" variables against each other.
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+p2<- ggplot(data = iris, aes(x = Petal.Width, 
+                              y = Sepal.Width, color = Species
+                              )) + geom_point()
+inputData$Species <- result
+p2 <- p2 + geom_point(data = inputData, shape = 23, size = 4)
+ggplotly(p2)
+```
