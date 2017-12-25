@@ -1,8 +1,11 @@
 library(shiny)
-library(caret)
+library(randomForest)
 library(ggplot2)
+library(lattice)
+library(caret)
 library(plotly)
 library(ggthemes)
+library(e1071)
 
 iris_virginica <- "https://www.fs.fed.us/wildflowers/beauty/iris/Blue_Flag/images/iris_virginica_virginica_lg.jpg"
 iris_verisicolor <- "https://www.plant-world-seeds.com/images/item_images/000/003/884/large_square/IRIS_VERSICOLOR.JPG?1495391088"
@@ -58,6 +61,7 @@ shinyServer(function(input, output) {
        p1 <- p1 + geom_point(data = plotInput, shape = 23, size = 4) + theme_gdocs()
        print(ggplotly(p1))
        
+       
    })
    
    output$plot2 <- renderPlotly({
@@ -67,6 +71,7 @@ shinyServer(function(input, output) {
        plotInput$Species <- as.character(pred())
        p2 <- p2 + geom_point(data = plotInput, shape = 23, size = 4) + theme_gdocs()
        print(ggplotly(p2))
+       # p2
        
    })
        

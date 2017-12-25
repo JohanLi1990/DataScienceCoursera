@@ -1,5 +1,11 @@
 library(shiny)
+library(ggplot2)
+library(lattice)
+library(caret)
 library(plotly)
+library(ggthemes)
+library(e1071)
+
 shinyUI(fluidPage(
     titlePanel("Iris Classification Simple Application"),
     sidebarLayout(
@@ -60,6 +66,7 @@ shinyUI(fluidPage(
                                  br(),
                                  br(),
                                  plotlyOutput("plot2"),
+                                 # plotlyOutput("plot2"),
                                  br(),
                                  br(),
                                  br(),
